@@ -233,6 +233,14 @@
                         <input type="email" id="email" required placeholder="john.smith@vghfoundation.ca">
                     </div>
                     
+                    <div class="form-group">
+                        <label for="banner">Select Banner *</label>
+                        <select id="banner" required style="width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 14px; background: white; cursor: pointer;">
+                            <option value="vgh-plus-you">VGH + YOU</option>
+                            <option value="join-community">Join our community of donors</option>
+                        </select>
+                    </div>
+                    
                     <div class="section-divider">
                         <div class="section-title">Assistant Information (Optional)</div>
                         
@@ -351,6 +359,14 @@
                 assistantLine = `<span style="font-family:Consolas,Courier,monospace;font-size:13px;color:#000;text-transform:uppercase;white-space:nowrap;">${assistantParts.join(' | ')}</span>`;
             }
             
+            // Select banner based on user choice
+            let bannerHTML = '';
+            if (data.banner === 'vgh-plus-you') {
+                bannerHTML = '<a href="https://vghfoundation.ca/?utm_medium=email&utm_source=outlook&utm_campaign=VGHplus&utm_content=signatureBanner-VGHplusyou"><img src="https://vghfoundation.ca/wp-content/uploads/2025/09/2025_FDN_E-Signature_PlusYou.png" alt="VGH & UBC Hospital Foundation" width="610" border="0" style="display:block;" /></a>';
+            } else if (data.banner === 'join-community') {
+                bannerHTML = '<a href="https://vghfoundation.ca"><img src="https://vghfoundation.ca/wp-content/uploads/2025/09/Banner-2.png" alt="VGH & UBC Hospital Foundation" width="610" border="0" style="display:block;" /></a>';
+            }
+            
             return `<table border="0" cellspacing="0" cellpadding="0" width="600" style="border-collapse:collapse;margin:0;padding:0;">
     <tr>
         <td width="600" style="padding:0 0 16px 0;">
@@ -372,7 +388,7 @@
 <table border="0" cellspacing="0" cellpadding="0" width="610" style="border-collapse:collapse;margin:0;padding:0;">
     <tr>
         <td width="610" style="padding:16px 0;">
-            <a href="https://vghfoundation.ca/?utm_medium=email&utm_source=outlook&utm_campaign=VGHplus&utm_content=signatureBanner-VGHplusyou"><img src="https://vghfoundation.ca/wp-content/uploads/2025/09/2025_FDN_E-Signature_PlusYou.png" alt="VGH & UBC Hospital Foundation" width="610" border="0" style="display:block;" /></a>
+            ${bannerHTML}
         </td>
     </tr>
     <tr>
@@ -401,6 +417,7 @@
                 ext: document.getElementById('ext').value || '',
                 cell: document.getElementById('cell').value || '',
                 email: document.getElementById('email').value,
+                banner: document.getElementById('banner').value,
                 assistantName: document.getElementById('assistantName').value || '',
                 assistantPhone: document.getElementById('assistantPhone').value || '',
                 assistantExt: document.getElementById('assistantExt').value || '',
