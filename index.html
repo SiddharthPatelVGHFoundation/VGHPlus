@@ -28,6 +28,7 @@
             background: white;
             border-radius: 20px;
             box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            border: 3px solid #000;
             overflow: hidden;
         }
         
@@ -371,4 +372,89 @@
 <table border="0" cellspacing="0" cellpadding="0" width="610" style="border-collapse:collapse;margin:0;padding:0;">
     <tr>
         <td width="610" style="padding:16px 0;">
-            <a href="https://vghfoundation.ca/?utm_medium=email&utm_source=outlook&utm_campaign=VGHplus&utm_content=signatureBanner-VGHplusyou"><img src="https://vghfoundation.ca/wp-content/uploads/2025/09/2025_FDN_E-Signature_PlusYou.png" alt="VGH & U
+            <a href="https://vghfoundation.ca/?utm_medium=email&utm_source=outlook&utm_campaign=VGHplus&utm_content=signatureBanner-VGHplusyou"><img src="https://vghfoundation.ca/wp-content/uploads/2025/09/2025_FDN_E-Signature_PlusYou.png" alt="VGH & UBC Hospital Foundation" width="610" border="0" style="display:block;" /></a>
+        </td>
+    </tr>
+    <tr>
+        <td width="610">
+            <span style="font-family:Arial,Verdana,Sans-Serif;font-size:9px;color:#000;">I acknowledge, with gratitude, that my place of work is on the traditional unceded territories of the xʷməθkʷəy̓əm (Musqueam),<br>Sḵwx̱wú7mesh (Squamish) and Səl̓ílwətaʔ/Selilwitulh (Tsleil-waututh) Nations.</span>
+        </td>
+    </tr>
+    <tr>
+        <td style="padding:8px 0 0 0;">
+            <a href="https://reviews.canadastop100.com/top-employer-vancouver-general-hospital-university-of-british-columbia-hospital-foundation?lang=en"><img src="https://go.vghfoundation.ca/l/891751/2025-02-06/fqj9f/891751/1738865270VSn4miPi/BC_Top_Employers_130x78.png" alt="BC's Top Employers" width="100" border="0" /></a>
+        </td>
+    </tr>
+</table>`;
+        }
+
+        document.getElementById('signatureForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const data = {
+                firstname: document.getElementById('firstname').value,
+                lastname: document.getElementById('lastname').value,
+                designations: document.getElementById('designations').value || '',
+                jobtitle: document.getElementById('jobtitle').value,
+                department: document.getElementById('department').value || '',
+                phone: document.getElementById('phone').value || '',
+                ext: document.getElementById('ext').value || '',
+                cell: document.getElementById('cell').value || '',
+                email: document.getElementById('email').value,
+                assistantName: document.getElementById('assistantName').value || '',
+                assistantPhone: document.getElementById('assistantPhone').value || '',
+                assistantExt: document.getElementById('assistantExt').value || '',
+                assistantEmail: document.getElementById('assistantEmail').value || ''
+            };
+            
+            const signature = generateSignature(data);
+            document.getElementById('preview').innerHTML = signature;
+            document.getElementById('copyBtn').style.display = 'block';
+            document.getElementById('downloadBtn').style.display = 'block';
+        });
+
+        document.getElementById('copyBtn').addEventListener('click', function() {
+            const preview = document.getElementById('preview');
+            
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = preview.innerHTML;
+            tempDiv.style.position = 'absolute';
+            tempDiv.style.left = '-9999px';
+            document.body.appendChild(tempDiv);
+            
+            const range = document.createRange();
+            range.selectNodeContents(tempDiv);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            
+            try {
+                document.execCommand('copy');
+                const alert = document.getElementById('copyAlert');
+                alert.style.display = 'block';
+                setTimeout(() => {
+                    alert.style.display = 'none';
+                }, 3000);
+            } catch (err) {
+                console.error('Copy failed', err);
+            }
+            
+            selection.removeAllRanges();
+            document.body.removeChild(tempDiv);
+        });
+
+        document.getElementById('downloadBtn').addEventListener('click', function() {
+            const signature = document.getElementById('preview').innerHTML;
+            const blob = new Blob([signature], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'email_signature.html';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        });
+    </script>
+</body>
+</html>
